@@ -10,6 +10,9 @@ def mean_w2v_vector(text: str, model: KeyedVectors) -> np.ndarray:
     mean_vector = sum_vector / np.linalg.norm(sum_vector)
     return mean_vector
 
+def mean_w2v_vectors(texts: list[str], model: KeyedVectors) -> np.ndarray[np.ndarray]:
+    return np.array([mean_w2v_vector(x, model) for x in texts])
+
 def concat_w2v(w2v_list: list[np.ndarray], tfidf_matrix: csr_matrix) -> lil_matrix:
     w2v_len = w2v_list[0].shape[0]
     new_tfidf_matrix = lil_matrix((tfidf_matrix.shape[0], tfidf_matrix.shape[1] + w2v_len), dtype=float)
