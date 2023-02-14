@@ -1,4 +1,8 @@
 from re import sub
+import logging
+
+logger = logging.getLogger(__file__)
+
 def clean_tokenize(text: str) -> list[str]:
     return sub(f'\s+', ' ', sub(r'(<[^>]*>)|[^\w\s]', '', text.lower())).split()
 
@@ -35,12 +39,17 @@ def do_lemmatizing(tokens: list[str]) -> None:
     for i in range(len(tokens)):
         tokens[i] = lemmatizer.lemmatize(tokens[i])
 
+from random import choice
+
 def remove_lowfreq(text: str, forms_to_remove: set[str], new_token_amount_counter: list[int]) -> str:
     """
     `new_token_amount_counter` is a 'pointer parody'. Idk how to pass a counter into a function.
     think of it as of an int value that is passed by reference
     """
     new_tokens = [tkn for tkn in text.split() if not tkn in forms_to_remove]
+    if len(new_tokens) <= 1:
+        new_tokens.append(choice(text.split()))
+        logger.warn(f"All tokens were removed from text. Random one is left. Text: \"{' '.join(text.split()[:5])}\"...")
     new_token_amount_counter[0] += len(new_tokens)
     return ' '.join(new_tokens)
 
