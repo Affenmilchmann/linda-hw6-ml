@@ -18,12 +18,16 @@ stop_words = set(StopWords.words('english'))
 def stopword_filtering(tokens: list[str]) -> list[str]:
     return [tkn for tkn in tokens if not tkn in stop_words]
 
-from nltk.corpus import wordnet as wn
+# from nltk.corpus import wordnet as wn
 
+from nltk.stem import PorterStemmer
+from nltk.tokenize import word_tokenize
+
+ps = PorterStemmer()
 def do_stemming(tokens: list[str]) -> None:
     """In place"""
     for i in range(len(tokens)):
-        result = wn.morphy(tokens[i])
+        result = ps.stem(tokens[i])
         if result:
             tokens[i] = result
 
